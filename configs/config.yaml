@@ -1,0 +1,81 @@
+# Coffee Leaf Defect Detector - Configuration File
+
+# Data Configuration
+data:
+  raw_data_path: "data/raw/"
+  processed_data_path: "data/processed/"
+  train_split: 0.7
+  val_split: 0.15
+  test_split: 0.15
+  image_size: [224, 224]
+  n_classes: 4
+  class_names: ["Healthy", "Rust", "Berry_Disease", "Black_Rot"]
+
+# Data Augmentation
+augmentation:
+  rotation_range: 30
+  zoom_range: 0.2
+  width_shift_range: 0.2
+  height_shift_range: 0.2
+  horizontal_flip: true
+  vertical_flip: false
+  brightness_range: [0.8, 1.2]
+  fill_mode: "nearest"
+
+# Model Configuration
+model:
+  architecture: "mobilenetv2"  # Options: resnet50, mobilenetv2, efficientnet, vgg16
+  pretrained_weights: "imagenet"
+  freeze_backbone: true
+  dropout_rate: 0.5
+  regularization: "l2"
+  l2_lambda: 0.0001
+
+# Training Configuration
+training:
+  epochs: 50
+  batch_size: 32
+  learning_rate: 0.001
+  optimizer: "adam"  # Options: adam, sgd, rmsprop
+  loss_function: "categorical_crossentropy"
+  metrics: ["accuracy", "precision", "recall"]
+  early_stopping_patience: 10
+  reduce_lr_patience: 5
+  reduce_lr_factor: 0.5
+  validation_freq: 1
+
+# Callbacks
+callbacks:
+  enable_early_stopping: true
+  enable_reduce_lr: true
+  enable_checkpointing: true
+  checkpoint_dir: "models/trained_models/"
+  log_dir: "logs/"
+
+# Evaluation Configuration
+evaluation:
+  metrics: ["accuracy", "precision", "recall", "f1", "auc"]
+  plot_confusion_matrix: true
+  plot_roc_curve: true
+  generate_classification_report: true
+
+# Visualization
+visualization:
+  enable_gradcam: true
+  gradcam_layer: "conv_pw_13"  # Last conv layer for MobileNetV2
+  enable_saliency_map: true
+  save_visualizations: true
+  output_dir: "results/visualizations/"
+
+# Deployment
+deployment:
+  convert_to_tflite: true
+  quantization_type: "dynamic"  # Options: dynamic, float16, int8
+  tflite_output_path: "models/mobile_model.tflite"
+  enable_gpu: true
+
+# Logging
+logging:
+  level: "INFO"
+  log_file: "logs/project.log"
+  save_metrics: true
